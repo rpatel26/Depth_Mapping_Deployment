@@ -29,8 +29,7 @@ kinect_setup:
 kinect_install:
 	#install the necessary dependencies or the kinect
 	sudo apt-get install git-core cmake freeglut3-dev pkg-config build-essential libxmu-dev libxi-dev libusb-1.0-0-dev
-	#clone the github repository into your system
-	git clone git://github.com/OpenKinect/libfreenect.git
+	sudo reboot
 
 machine_learning_setup:
 	ls
