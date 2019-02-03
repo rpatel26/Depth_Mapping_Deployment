@@ -32,16 +32,14 @@ class cifar10vgg:
         batch_step = 5
         batch_end = 100 + batch_step
 
-        max_epoch_start = 50
-        max_epoch_end = max_epoch_start 
+        max_epoch_start = 1
+        max_epoch_step = 10
+        max_epoch_end = 1
         
         learning_start = 0.000001
         learning_step = 0.000005
         learning_end = 1 + learning_step
         
-        self.fileName = 'output.txt'
-        self.fp = open(self.fileName, "w")
-        self.fp.write("Results:\n")
         
         max_loss = 0.7
         
@@ -58,27 +56,7 @@ class cifar10vgg:
                         residuals = np.argmax(predicted_x,1)==self.y_test#np.argmax(self.y_test,1)
 
                         loss = sum(residuals)/len(residuals)
-                        print("the validation 0/1 loss is: ",loss)
                         if(max_loss <= loss):
-                            print("Loss Improved")
-                            self.fp.write("loss updated\n")
-                            
-                            self.fp.write("loss = ")
-                            self.fp.write(str(loss))
-                            self.fp.write("\n")
-                            
-                            self.fp.write("batch size = ")
-                            self.fp.write(str(i))
-                            self.fp.write("\n")
-                            
-                            self.fp.write("max epoch = ")
-                            self.fp.write(str(j))
-                            self.fp.write("\n")
-                            
-                            self.fp.write("learning rate = ")
-                            self.fp.write(str(k))
-                            self.fp.write("\n\n")
-
                             max_loss = loss
         else:
             self.model.load_weights('cifar10vgg.h5')
@@ -258,9 +236,6 @@ class cifar10vgg:
         # mess around with batch_size and maxepoches for results
         #training parameters
         
-        print("batch size = ", batchSize)
-        print("max epoches = ", max_epoches)
-        print("learning rate = ", learningRate)
         batch_size = batchSize
         maxepoches = max_epoches
         learning_rate = learningRate
@@ -356,7 +331,5 @@ if __name__ == '__main__':
     residuals = np.argmax(predicted_x,1)==np.argmax(y_test,1)
 
 #     print("Result = ", residuals[-1])
-    loss = sum(residuals)/len(residuals)
-    print("the validation 0/1 loss is: ",loss)
-    print("AWS has been succesfully setup."\n)
+    print("AWS has been succesfully setup")
 
