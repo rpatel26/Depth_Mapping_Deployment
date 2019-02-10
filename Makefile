@@ -6,13 +6,13 @@ pi_setup:
 
 kinect_setup:
 	#install openCV
-	pip install opencv-python
+	#sudo pip3 install opencv-python
 	#install matplotlib
-	sudo pip3 install matplotlib
+	pip3 install matplotlib
 	#install scikit-learn
 	sudo pip3 install scikit-learn
 	#install plotly
-	sudo pip install plotly
+	sudo pip3 install plotly
 	#install numpy
 	sudo apt-get install python3-numpy 
 	#install jupyter notebook
