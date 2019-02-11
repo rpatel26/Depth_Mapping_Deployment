@@ -1,5 +1,5 @@
 pi_setup:
-	# install vim
+	# install vim1
 	sudo apt-get install vim -y
 	# install pip
 	sudo apt-get install python3-pip
