@@ -3,20 +3,24 @@ pi_setup:
 	sudo apt-get install vim -y
 	# install pip
 	sudo apt-get install python3-pip
+	# uninstall and reinstall pip3
+	sudo python3 -m pip uninstall pip && sudo apt install python3-pip --reinstall
 
 kinect_setup:
 	#install openCV
 	#sudo pip3 install opencv-python
+	#install dependency for matplotlib
+	sudo apt-get build-dep python3-matplotlib
 	#install matplotlib
 	pip3 install matplotlib
 	#install scikit-learn
-	sudo pip3 install scikit-learn
+	sudo -H pip3 install scikit-learn 
 	#install plotly
-	sudo pip3 install plotly
+	sudo -H pip3 install plotly
 	#install numpy
 	sudo apt-get install python3-numpy 
 	#install jupyter notebook
-	python3 -m pip install jupyter
+	sudo python3 -m pip install jupyter
 	#install cython3
 	sudo apt-get install cython3
 	#install python-dev
