@@ -1,0 +1,59 @@
+Determining if the system is big endian passed with the following output:
+Change Dir: /home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d7b1d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d7b1d.dir/build.make CMakeFiles/cmTC_d7b1d.dir/build
+make[1]: Entering directory '/home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d7b1d.dir/TestEndianess.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_d7b1d.dir/TestEndianess.c.o   -c /home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp/TestEndianess.c
+Linking C executable cmTC_d7b1d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d7b1d.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_d7b1d.dir/TestEndianess.c.o  -o cmTC_d7b1d -rdynamic 
+make[1]: Leaving directory '/home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp'
+
+TestEndianess.c:
+/* A 16 bit integer is required. */
+typedef unsigned short cmakeint16;
+
+/* On a little endian machine, these 16bit ints will give "THIS IS LITTLE ENDIAN."
+   On a big endian machine the characters will be exchanged pairwise. */
+const cmakeint16 info_little[] =  {0x4854, 0x5349, 0x4920, 0x2053, 0x494c, 0x5454, 0x454c, 0x4520, 0x444e, 0x4149, 0x2e4e, 0x0000};
+
+/* on a big endian machine, these 16bit ints will give "THIS IS BIG ENDIAN."
+   On a little endian machine the characters will be exchanged pairwise. */
+const cmakeint16 info_big[] =     {0x5448, 0x4953, 0x2049, 0x5320, 0x4249, 0x4720, 0x454e, 0x4449, 0x414e, 0x2e2e, 0x0000};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_little[argc];
+  require += info_big[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_74e77/fast"
+/usr/bin/make -f CMakeFiles/cmTC_74e77.dir/build.make CMakeFiles/cmTC_74e77.dir/build
+make[1]: Entering directory '/home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_74e77.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -Wall -O2  -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_74e77.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_74e77
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74e77.dir/link.txt --verbose=1
+/usr/bin/cc  -Wall -O2  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_74e77.dir/CheckFunctionExists.c.o  -o cmTC_74e77 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_74e77.dir/build.make:97: recipe for target 'cmTC_74e77' failed
+make[1]: *** [cmTC_74e77] Error 1
+make[1]: Leaving directory '/home/pib/workspace/libfreenect/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_74e77/fast' failed
+make: *** [cmTC_74e77/fast] Error 2
+
+

@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+c64b40eadbe9a1f0e351c2a1889df96b CMakeFiles/uninstall
+7e43190dfcc32485775c49c22e56b7c1 wrappers/python/freenect2.c
+dcaf6078c52f5be03c56eca748bbaf56 wrappers/python/freenect3.c
