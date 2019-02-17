@@ -37,7 +37,7 @@ cmake_minimum_required(VERSION 2.8.12)
 ######################################################################################
 
 PROJECT(libfreenect)
-
+set (CMAKE_CXX_STANDARD 11) 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/")
 
 # Find the host operating system and architecture
@@ -58,11 +58,11 @@ OPTION(BUILD_EXAMPLES "Build example programs" ON)
 OPTION(BUILD_FAKENECT "Build fakenect mock library" ON)
 OPTION(BUILD_C_SYNC "Build c synchronous library" ON)
 OPTION(BUILD_CPP "Build C++ Library (currently header only)" ON)
-OPTION(BUILD_CV "Build OpenCV wrapper" ON)
+OPTION(BUILD_CV "Build OpenCV wrapper" OFF)
 OPTION(BUILD_AS3_SERVER "Build the Actionscript 3 Server Example" OFF)
-OPTION(BUILD_PYTHON "Build Python extensions" ON)
+OPTION(BUILD_PYTHON "Build Python extensions" OFF)
 OPTION(BUILD_PYTHON2 "Build Python 2 extension" OFF)
-OPTION(BUILD_PYTHON3 "Build Python 3 extension" ON)
+OPTION(BUILD_PYTHON3 "Build Python 3 extension" OFF)
 OPTION(BUILD_OPENNI2_DRIVER "Build libfreenect driver for OpenNI2" OFF)
 IF(PROJECT_OS_LINUX)
 	OPTION(BUILD_CPACK_DEB "Build an DEB using CPack" OFF)
