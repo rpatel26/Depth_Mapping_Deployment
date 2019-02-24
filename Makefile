@@ -9,8 +9,7 @@ pi_setup:
 	sudo python3 -m pip uninstall pip && sudo apt install python3-pip --reinstall
 
 kinect_setup:
-	#install openCV
-	make openCV
+	
 	#install dependency for matplotlib
 	sudo apt-get build-dep python3-matplotlib
 	#install matplotlib
@@ -27,7 +26,8 @@ kinect_setup:
 	sudo apt-get install cython3
 	#install python-dev
 	sudo apt-get install python3-dev
-
+	#intall openCV
+	make openCV
 openCV:
 	make openCV_dependencies
 	cd $(path); wget -O opencv.zip https://github.com/opencv/opencv/archive/3.3.1.zip; unzip opencv.zip; cd ./opencv-3.3.1; mkdir build; cd build; cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local ..; make -j3; sudo make install
