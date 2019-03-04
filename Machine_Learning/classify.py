@@ -14,7 +14,8 @@ if __name__ == '__main__':
     print("number of classes = ", num_classes)    
     for i in classes:
         print(i)
-    
+   
+   	# TODO: build model and load weights 
     model = build_model(num_classes)
     model.load_weights(model_path)
 
