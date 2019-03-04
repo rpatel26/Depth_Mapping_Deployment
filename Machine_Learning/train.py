@@ -162,8 +162,8 @@ def load_model(num_classes):
 	model.add(Dropout(0.5))
 	
 	prediction = model.add(Dense(num_classes, activation = 'softmax'))
-        #model.load_weights('personal_train.h5')
-	model.load_weights('personal_train.h5')	
+	# model.load_weights('personal_train.h5')
+	model.summary()
 
 	return model
 
@@ -180,7 +180,7 @@ def normalize(X_train,X_test):
 	return X_train, X_test
 
 def train_model(model, xTrain, yTrain, xTest, yTest,
-		num_classes, batchSize = 128, max_epoches = 64,learningRate = 0.0001, outFile = 'personal_train.h5'):
+		num_classes, batchSize = 128, max_epoches = 250,learningRate = 0.0001, outFile = 'personal_train.h5'):
 	
 	batch_size = batchSize
 	maxepoches = max_epoches
@@ -214,6 +214,18 @@ def train_model(model, xTrain, yTrain, xTest, yTest,
 		horizontal_flip=True,  # randomly flip images
 		vertical_flip=True)  # randomly flip images
 	# (std, mean, and principal components if ZCA whitening is applied).
+
+	datagen = ImageDataGenerator(
+		featurewise_center=False,  # set input mean to 0 over the dataset
+		samplewise_center=False,  # set each sample mean to 0
+		featurewise_std_normalization=False,  # divide inputs by std of the dataset
+		samplewise_std_normalization=False,  # divide each input by its std
+		zca_whitening=False,  # apply ZCA whitening
+		rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
+		width_shift_range=0.0,  # randomly shift images horizontally (fraction of total width)
+		height_shift_range=0.0,  # randomly shift images vertically (fraction of total height)
+		horizontal_flip=False,  # randomly flip images
+		vertical_flip=False)  # randomly flip images
 	datagen.fit(x_train)
 
 
