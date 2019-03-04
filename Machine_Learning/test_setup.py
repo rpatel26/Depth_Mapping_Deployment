@@ -303,7 +303,7 @@ if __name__ == '__main__':
     x_train = x_train.astype('float32')
     x_test = x_test.astype('float32')
 
-	model = cifar10vgg(train=True)
+    model = cifar10vgg(train=True)
 
     predicted_x = model.predict(x_test)
     residuals = np.argmax(predicted_x,1)==np.argmax(y_test,1)

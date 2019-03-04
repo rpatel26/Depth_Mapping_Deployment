@@ -148,7 +148,7 @@ def load_model(num_classes):
 	x_shape = [DEFAULT_WIDTH,DEFAULT_HEIGHT,3]
 	
 	model = Sequential()
-	model.add(Conv2D(32, (3,3), input_shape = x_shape, activation = 'relu'))
+	model.add(Conv2D(32, (6,6), input_shape = x_shape, activation = 'relu'))
 	model.add(MaxPooling2D(pool_size = (2,2)))
 
 	model.add(Conv2D(16, (3,3), activation = 'relu'))
@@ -162,7 +162,8 @@ def load_model(num_classes):
 	model.add(Dropout(0.5))
 	
 	prediction = model.add(Dense(num_classes, activation = 'softmax'))
-	model.summary()	
+        #model.load_weights('personal_train.h5')
+	model.load_weights('personal_train.h5')	
 
 	return model
 
@@ -179,7 +180,7 @@ def normalize(X_train,X_test):
 	return X_train, X_test
 
 def train_model(model, xTrain, yTrain, xTest, yTest,
-		num_classes, batchSize = 128, max_epoches = 250,learningRate = 0.001, outFile = 'personal_train.h5'):
+		num_classes, batchSize = 128, max_epoches = 64,learningRate = 0.0001, outFile = 'personal_train.h5'):
 	
 	batch_size = batchSize
 	maxepoches = max_epoches
