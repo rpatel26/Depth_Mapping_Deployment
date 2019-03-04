@@ -2,28 +2,28 @@ from __future__ import print_function
 import os
 import numpy as np
 
-# from keras.applications.vgg16 import VGG16
-# import keras
-# from keras.datasets import cifar10
-# from keras.preprocessing.image import ImageDataGenerator
-# from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Activation, Flatten
-# from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
-# from keras import optimizers
-# from keras.models import Model
+from keras.applications.vgg16 import VGG16
+import keras
+from keras.datasets import cifar10
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from keras import optimizers
+from keras.models import Model
 
-# from keras import optimizers
-# from keras.layers import Dropout, Flatten, Dense
-# from keras.utils.np_utils import to_categorical
+from keras import optimizers
+from keras.layers import Dropout, Flatten, Dense
+from keras.utils.np_utils import to_categorical
 
-# from keras.layers.core import Lambda
-# from keras import backend as K
-# from keras import regularizers
-# import cv2
-# from scipy import misc
-# from scipy.ndimage import imread
+from keras.layers.core import Lambda
+from keras import backend as K
+from keras import regularizers
+import cv2
+from scipy import misc
+from scipy.ndimage import imread
 
-# import argparse
+import argparse
 # from model import build_model
 
 DEFAULT_WIDTH = 32
@@ -45,7 +45,7 @@ Return Values:
 	- y_test: labels for the testing set
 	- num_classes: number of classes in the dataset
 '''
-def load_data(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGHT, prop = 0.2):
+def load_data2(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGHT, prop = 0.2):
 	x_train = np.empty([0, max_x, max_y, 3])
 	x_test = np.empty([0, max_x, max_y, 3])
 
@@ -62,9 +62,7 @@ def load_data(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGHT
 
 
 
-def load_data2(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGHT, prop = 0.2):
-#         print("loading dataset")
-	    
+def load_data(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGHT, prop = 0.2):
 	x_train = np.empty([0, max_x, max_y, 3])
 	x_test = np.empty([0, max_x, max_y, 3])
 
@@ -78,7 +76,7 @@ def load_data2(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGH
 		for f in filename:
 			fp = os.path.join(dirpath, f)	# image file
 			image = imread(fp)
-			print("loading file: ", fp)
+			# print("loading file: ", fp)
 			image = cv2.resize(image, (max_y,max_x))
 					
 			if len(image.shape) == 3:
@@ -114,9 +112,13 @@ def load_data2(path = './dataset/', max_x = DEFAULT_WIDTH, max_y = DEFAULT_HEIGH
 
 ''' 
 Function name: load_model()
-Function Description: 
+Function Description: this function builds the model and load weight for training
+Parameters:
+	- num_classes: number of objects being trained 
+Return Value:
+	- model: object contraining the model, with weights loaded
 '''
-def load_model(num_classes):
+def load_model2(num_classes):
 	# TODO: use VGG16 to load lower layers of vgg16 network and declare it as base_model
     # TODO: use 'imagenet' for weights, include_top=False, (IMG_H, IMG_W, NUM_CHANNELS) for input_shape
 
@@ -131,21 +133,165 @@ def load_model(num_classes):
 
 	return model
 
-def load_model2(num_classes):
-	model = VGG16(weights = 'imagenet', include_top=False, 
-					input_shape = (DEFAULT_WIDTH,DEFAULT_HEIGHT,3))
+def load_model(num_classes):
+	# model = VGG16(weights = 'imagenet', include_top=False, 
+	# 				input_shape = (DEFAULT_WIDTH,DEFAULT_HEIGHT,3))
 
-	base_out = model.output
-	base_out = Flatten()(base_out)
-	base_out = Dense(256, activation = 'relu')(base_out)
-	base_out = Dropout(0.5)(base_out)
-	predictions = Dense(num_classes, activation = 'softmax')(base_out)
+	# base_out = model.output
+	# base_out = Flatten()(base_out)
+	# base_out = Dense(256, activation = 'relu')(base_out)
+	# base_out = Dropout(0.5)(base_out)
+	# predictions = Dense(num_classes, activation = 'softmax')(base_out)
 
-	model = Model(inputs=model.inputs, outputs=predictions)
+	# model = Model(inputs=model.inputs, outputs=predictions)
 
+	x_shape = [DEFAULT_WIDTH,DEFAULT_HEIGHT,3]
+	
+	model = Sequential()
+	model.add(Conv2D(32, (3,3), input_shape = x_shape, activation = 'relu'))
+	model.add(MaxPooling2D(pool_size = (2,2)))
+
+	model.add(Conv2D(16, (3,3), activation = 'relu'))
+	model.add(MaxPooling2D(pool_size = (2,2)))
+
+	model.add(Flatten())
+	model.add(Dense(32, activation = 'relu'))
+	model.add(Dropout(0.5))
+	
+	prediction = model.add(Dense(num_classes, activation = 'softmax'))
 	model.summary()	
 
 	return model
+
+
+def normalize(X_train,X_test):
+	#this function normalize inputs for zero mean and unit variance
+	# it is used when training a model.
+	# Input: training set and test set
+	# Output: normalized training set and test set according to the trianing set statistics.
+	mean = np.mean(X_train,axis=(0,1,2,3))
+	std = np.std(X_train, axis=(0, 1, 2, 3))
+	X_train = (X_train-mean)/(std+1e-7)
+	X_test = (X_test-mean)/(std+1e-7)
+	return X_train, X_test
+
+def train_model(model, xTrain, yTrain, xTest, yTest,
+		num_classes, batchSize = 128, max_epoches = 250,learningRate = 0.001, outFile = 'personal_train.h5'):
+	
+	batch_size = batchSize
+	maxepoches = max_epoches
+	learning_rate = learningRate
+	lr_decay = 1e-6
+	lr_drop = 20
+	
+
+	(x_train, y_train), (x_test, y_test) = (xTrain, yTrain),(xTest, yTest)
+
+	x_train = x_train.astype('float32')
+	x_test = x_test.astype('float32')
+	x_train, x_test = normalize(x_train, x_test)
+
+	y_train = keras.utils.to_categorical(y_train, num_classes)
+	y_test = keras.utils.to_categorical(y_test, num_classes)
+
+	def lr_scheduler(epoch):
+		return learning_rate * (0.5 ** (epoch // lr_drop))
+	reduce_lr = keras.callbacks.LearningRateScheduler(lr_scheduler)
+
+	datagen = ImageDataGenerator(
+		featurewise_center=False,  # set input mean to 0 over the dataset
+		samplewise_center=True,  # set each sample mean to 0
+		featurewise_std_normalization=False,  # divide inputs by std of the dataset
+		samplewise_std_normalization=True,  # divide each input by its std
+		zca_whitening=True,  # apply ZCA whitening
+		rotation_range=30,  # randomly rotate images in the range (degrees, 0 to 180)
+		width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
+		height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
+		horizontal_flip=True,  # randomly flip images
+		vertical_flip=True)  # randomly flip images
+	# (std, mean, and principal components if ZCA whitening is applied).
+	datagen.fit(x_train)
+
+
+
+	#optimization details
+	sgd = optimizers.SGD(lr=learning_rate, decay=lr_decay, momentum=0.9, nesterov=True)
+	model.compile(loss='categorical_crossentropy', optimizer=sgd,metrics=['accuracy'])
+
+
+	# training process in a for loop with learning rate drop every 25 epoches.
+
+	historytemp = model.fit_generator(datagen.flow(x_train, y_train,
+									 batch_size=batch_size),
+						steps_per_epoch=x_train.shape[0] // batch_size,
+						epochs=maxepoches, 
+						validation_data=(x_test, y_test),callbacks=[reduce_lr],verbose=1)
+
+
+	model.save_weights(outFile)
+	print("Model saved as: ", outFile)
+
+	return model
+
+def train_model2(model, xTrain, yTrain, xTest, yTest,
+		num_classes, batchSize = 128, max_epoches = 250,learningRate = 0.001, outFile = 'personal_train.h5'):
+	
+	batch_size = batchSize
+	maxepoches = max_epoches
+	learning_rate = learningRate
+	lr_decay = 1e-6
+	lr_drop = 20
+	
+
+	(x_train, y_train), (x_test, y_test) = (xTrain, yTrain),(xTest, yTest)
+
+	x_train = x_train.astype('float32')
+	x_test = x_test.astype('float32')
+	x_train, x_test = normalize(x_train, x_test)
+
+	y_train = keras.utils.to_categorical(y_train, num_classes)
+	y_test = keras.utils.to_categorical(y_test, num_classes)
+
+	def lr_scheduler(epoch):
+		return learning_rate * (0.5 ** (epoch // lr_drop))
+	reduce_lr = keras.callbacks.LearningRateScheduler(lr_scheduler)
+
+	datagen = ImageDataGenerator(
+		featurewise_center=False,  # set input mean to 0 over the dataset
+		samplewise_center=True,  # set each sample mean to 0
+		featurewise_std_normalization=False,  # divide inputs by std of the dataset
+		samplewise_std_normalization=True,  # divide each input by its std
+		zca_whitening=True,  # apply ZCA whitening
+		rotation_range=30,  # randomly rotate images in the range (degrees, 0 to 180)
+		width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
+		height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
+		horizontal_flip=True,  # randomly flip images
+		vertical_flip=True)  # randomly flip images
+	# (std, mean, and principal components if ZCA whitening is applied).
+	datagen.fit(x_train)
+
+
+
+	#optimization details
+	sgd = optimizers.SGD(lr=learning_rate, decay=lr_decay, momentum=0.9, nesterov=True)
+	model.compile(loss='categorical_crossentropy', optimizer=sgd,metrics=['accuracy'])
+
+
+	# training process in a for loop with learning rate drop every 25 epoches.
+
+	historytemp = model.fit_generator(datagen.flow(x_train, y_train,
+									 batch_size=batch_size),
+						steps_per_epoch=x_train.shape[0] // batch_size,
+						epochs=maxepoches, 
+						validation_data=(x_test, y_test),callbacks=[reduce_lr],verbose=1)
+
+
+	# TODO: save model weight to the file specified by the 'outFile' parameter
+	model.save_weights(outFile)
+	print("Model saved as: ", outFile)
+
+	return model
+
 
 '''
 Possible arguments:
@@ -169,16 +315,15 @@ if __name__ == '__main__':
 	(x_train, y_train), (x_test, y_test), num_classes = load_data(path = dataset_path)
 
 	# TODO: remove exit(-1) when load_data() is completed
-	# print("Finished loading dataset")
-	# print("size of x_train = ", x_train.shape)
-	# print("size of x_test = ", x_test.shape)
-	# print("size of y_train = ", y_train.shape)
-	# print("size of y_test = ", y_test.shape)
 	# exit(-1)
 
 
 	# TODO: remove exit(-1) once load_model() is completed
 	model = load_model(num_classes) 
+	exit(-1)
+
+	# TODO: remove exit(-1) once train_model() is completed
+	model = train_model(model, x_train, y_train, x_test, y_test, num_classes)
 	exit(-1)
 
 
