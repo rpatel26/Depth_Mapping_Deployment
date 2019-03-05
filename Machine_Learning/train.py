@@ -119,6 +119,23 @@ Return Value:
 	- model: object contraining the model, with weights loaded
 '''
 def load_model2(num_classes):
+	model = Sequential()
+
+	# TODO: add a 2D convolution layer with 32 filters, and 6x6 kernal, make this the input layer
+	# TODO: add a relu activation layer
+	# TODO: add a batch normalization layer
+	# TODO: add a 2D max pooling layer with 2x2 kernal
+
+	# TODO: add a flatten layer
+	# TODO: add a fully-connected layer with 32 units and relu activation function
+	# TODO: add a dropout layer with 50% drop rate
+
+	model.add(Dense(num_classes, activation = 'softmax'))
+	model.summary()
+
+	return model
+
+def load_model3(num_classes):
 	# TODO: use VGG16 to load lower layers of vgg16 network and declare it as base_model
     # TODO: use 'imagenet' for weights, include_top=False, (IMG_H, IMG_W, NUM_CHANNELS) for input_shape
 
@@ -153,17 +170,17 @@ def load_model(num_classes):
 	model.add(BatchNormalization())
 	model.add(MaxPooling2D(pool_size = (2,2)))
 
-	model.add(Conv2D(16, (6,6)))
-	model.add(Activation('relu'))
-	model.add(BatchNormalization())
-	model.add(MaxPooling2D(pool_size = (2,2)))
+	# model.add(Conv2D(16, (6,6)))
+	# model.add(Activation('relu'))
+	# model.add(BatchNormalization())
+	# model.add(MaxPooling2D(pool_size = (2,2)))
 
 	# model.add(Conv2D(16, (3,3), activation = 'relu'))
 	# model.add(MaxPooling2D(pool_size = (2,2)))
 
 	model.add(Flatten())
 	model.add(Dense(32, activation = 'relu'))
-	model.add(Dropout(0.5))
+	model.add(Dropout(0.3))
 	
 	prediction = model.add(Dense(num_classes, activation = 'softmax'))
 	# model.load_weights('personal_train.h5')
@@ -184,7 +201,7 @@ def normalize(X_train,X_test):
 	return X_train, X_test
 
 def train_model(model, xTrain, yTrain, xTest, yTest,
-		num_classes, batchSize = 128, max_epoches = 250,learningRate = 0.0001, outFile = 'personal_train.h5'):
+		num_classes, batchSize = 128, max_epoches = 250,learningRate = 0.0001, outFile = 'personal_train2.h5'):
 	
 	batch_size = batchSize
 	maxepoches = max_epoches
