@@ -4,7 +4,7 @@ pi_setup:
 	# install vim1
 	sudo apt-get install vim -y
 	# install pip
-	sudo apt-get install python3-pip
+	sudo apt-get -y install python3-pip
 	# uninstall and reinstall pip3
 	sudo python3 -m pip uninstall pip && sudo apt install python3-pip --reinstall
 
@@ -19,13 +19,13 @@ kinect_setup:
 	#install plotly
 	sudo -H pip3 install plotly
 	#install numpy
-	sudo apt-get install python3-numpy 
+	sudo apt-get -y install python3-numpy 
 	#install jupyter notebook
 	sudo python3 -m pip install jupyter
 	#install cython3
-	sudo apt-get install cython3
+	sudo apt-get -y install cython3
 	#install python-dev
-	sudo apt-get install python3-dev
+	sudo apt-get -y install python3-dev
 	#intall openCV
 	make openCV
 openCV:
@@ -56,7 +56,7 @@ openCV_dependencies:
 
 kinect_install:
 	#install the necessary dependencies or the kinect
-	sudo apt-get install git-core cmake freeglut3-dev pkg-config build-essential libxmu-dev libxi-dev libusb-1.0-0-dev
+	sudo apt-get -y install git-core cmake freeglut3-dev pkg-config build-essential libxmu-dev libxi-dev libusb-1.0-0-dev
 	sudo reboot
 
 machine_learning_setup:
