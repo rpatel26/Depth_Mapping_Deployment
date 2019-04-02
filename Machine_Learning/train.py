@@ -99,7 +99,7 @@ def train_model(model, xTrain, yTrain, xTest, yTest,
 		
 	#TODO: compile the model with 'categorical_crossentropy' as loss function and
 	#			stocastic gradient descent optomizer with learning rate specified by 
-	#			the input parameter
+	#			the input parameter and 'accuracy' metrics
 
 	# TODO: train the model with (x_test, y_test) as validation data, with other hyper-parameters defined
 	#			by the inputs to this function call
